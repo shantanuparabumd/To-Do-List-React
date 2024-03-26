@@ -14,15 +14,13 @@ function App() {
   const [newTask, setNewTask] = useState('');
   // const [selectedCategory, setSelectedCategory] = useState('all');
   const [newCategory, setNewCategory] = useState('');
-  
-  const [statusFilter, setStatusFilter] = useState('incomplete');// Updated to use a string for easier comparison
-  const [categories, setCategories] = useState(['None']);
+  // const [priority, setPriority] = useState('low');
+  const [completed, setCompleted] = useState('false'); // Updated to use a string for easier comparison
+  const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [dueDate, setDueDate] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(['None']);
-
-  
-  const [priorityFilter, setPriorityFilter] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [priorityFilter, setPriority] = useState([]);
 
 
   const handleChange = (e) => {
@@ -35,15 +33,14 @@ function App() {
     const task = {
       id: uuidv4(),
       text: newTask,
-      category: 'None',
-      priority: 'low',
-      dueDate: dueDate,
-      completed: false
+      category: selectedCategory,
+      priority: priorityFilter,
+      dueDate: dueDate
     };
     setTasks([...tasks, task]);
     setNewTask('');
     setDueDate(null);
-    
+    setPriority(['low']);
   };
 
   const handleRemove = (taskId) => {
@@ -57,29 +54,12 @@ function App() {
   };
 
   const handleFilterByCategory = (category) => {
-    if (selectedCategory.includes(category)) {
-      // If it exists, remove it from the array
-      setSelectedCategory(selectedCategory.filter((p) => p !== category));
-    } else {
-      // If it doesn't exist, add it to the array
-      setSelectedCategory([...selectedCategory, category]);
-    }
+    setSelectedCategory(category);
   };
-
-  const handleFilterByPriority = (priority) => {
-      if(priorityFilter.includes(priority)){
-        setPriorityFilter(priorityFilter.filter((p)=> p!==priority));
-      }
-      else{
-        setPriorityFilter([...priorityFilter,priority]);
-      }
-  };
-
 
   const handleAddCategory = () => {
     if (newCategory.trim() === '') return;
     setCategories([...categories, newCategory]);
-    console.log(categories);
     setNewCategory('');
   };
 
@@ -105,19 +85,19 @@ function App() {
     if (task.category === 'all') {
       return true; // Return true to include all tasks when 'All Categories' is selected
     }
-    if (!selectedCategory.includes(task.category)) {
+    if (selectedCategory.length > 0 && !selectedCategory.includes(task.category)) {
       return false;
     }
-    if (!priorityFilter.includes(task.priority)) {
+    if (priority.length > 0 && !priority.includes(task.priority)) {
       return false;
     }
     if (searchQuery !== '' && !task.text.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
-    if (!task.completed && (statusFilter === 'complete')) {
+    if (completed === 'true' && !task.completed) {
       return false;
     }
-    if (task.completed && (statusFilter === 'incomplete')) {
+    if (completed === 'false' && task.completed) {
       return false;
     }
     
@@ -144,10 +124,15 @@ function App() {
     setTasks(updatedTasks);
   };
 
- 
+  const handleFilterByPriority = (priority) => {
+      const updatedPriorities = priority.includes(priority)
+      ? priority.filter((p) => p !== priority)
+      : [...priority, priority];
+    setPriority(updatedPriorities);
+  };
 
-  const handleStatusFilterChange = (status) => {
-    setStatusFilter(status);
+  const handleFilterByStatus = (status) => {
+    setCompleted(status);
   };
   
   
@@ -176,12 +161,12 @@ function App() {
           value={newTask}
           onChange={handleChange}
         />
-        {/* <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-          
+        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+          <option value="all">All Categories</option>
           {categories.map((category) => (
             <option key={category} value={category}>{category}</option>
           ))}
-        </select> */}
+        </select>
         <button type="submit"><MdAddCircle /></button>
       </form>
 
@@ -248,28 +233,19 @@ function App() {
                   <h3>Priority</h3>
                   <div class="filter-content">
                   <div class="filter-buttons">
-        <button onClick={() => handleFilterByPriority('high')}
-        style={{ backgroundColor: priorityFilter.includes('high') ? 'green' : '#dc3545' }}
-        >High Priority</button>
-        <button onClick={() => handleFilterByPriority('medium')}
-        style={{ backgroundColor: priorityFilter.includes('medium') ? 'green' : '#dc3545' }}
-        >Medium Priority</button>
-        <button onClick={() => handleFilterByPriority('low')}
-        style={{ backgroundColor: priorityFilter.includes('low') ? 'green' : '#dc3545' }}
-        >Low Priority</button>
+        <button onClick={() => handleFilterByPriority(['high'])}>High Priority</button>
+        <button onClick={() => handleFilterByPriority(['medium'])}>Medium Priority</button>
+        <button onClick={() => handleFilterByPriority(['low'])}>Low Priority</button>
       </div>
          
           </div>
       </div>
       <div class="filter-section">
-        <h3>Status</h3>
-        <div class="filter-content">
-        <div class="filter-buttons">
-        <button onClick={() => handleStatusFilterChange('complete')}
-        style={{ backgroundColor: statusFilter==='complete'? 'green' : '#dc3545' }}
-        >Complete</button>
-        <button onClick={() => handleStatusFilterChange('incomplete')}
-        style={{ backgroundColor: statusFilter==='incomplete'? 'green' : '#dc3545' }}>Incomplete</button>
+                  <h3>Status</h3>
+                  <div class="filter-content">
+                  <div class="filter-buttons">
+        <button onClick={() => handleFilterByStatus('true')}>Complete</button>
+        <button onClick={() => handleFilterByStatus('false')}>Incomplete</button>
       </div>
          
           </div>
@@ -292,10 +268,9 @@ function App() {
         
           <div class="filter-content">
           <div class="filter-buttons">
-        
+        <button onClick={() => handleFilterByCategory('all')}>All Tasks</button>
         {categories.map((category) => (
-          <button key={category} onClick={() => handleFilterByCategory(category)}
-          style={{ backgroundColor: selectedCategory.includes(category)? 'green' : '#dc3545' }}>
+          <button key={category} onClick={() => handleFilterByCategory(category)}>
             {category}
           </button>
         ))}
