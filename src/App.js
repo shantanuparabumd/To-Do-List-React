@@ -20,6 +20,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [dueDate, setDueDate] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(['None']);
+  const [allTask,setAllFilter] = useState(true);
 
   
   const [priorityFilter, setPriorityFilter] = useState([]);
@@ -89,6 +90,10 @@ function App() {
     ));
   };
 
+  const handleAllChange = ()=>{
+    setAllFilter(!allTask);
+  }
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -102,8 +107,11 @@ function App() {
   };
 
   const filteredTasks = tasks.filter((task) => {
-    if (task.category === 'all') {
-      return true; // Return true to include all tasks when 'All Categories' is selected
+    if (allTask){
+      return true;
+    }
+    if (!task.category === 'none') {
+      return false; // Return true to include all tasks when 'All Categories' is selected
     }
     if (!selectedCategory.includes(task.category)) {
       return false;
@@ -243,7 +251,9 @@ function App() {
 
       
       <div class="filter">
-
+      <button onClick={() => handleAllChange()}
+        style={{ backgroundColor: allTask? 'green' : '#dc3545' }}
+        >All Tasks</button>
       <div class="filter-section">
                   <h3>Priority</h3>
                   <div class="filter-content">
