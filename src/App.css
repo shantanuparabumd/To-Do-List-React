@@ -1,5 +1,5 @@
 .app {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@
 }
 
 .tasks {
-  width: 700px;
+  width: 1000px;
   padding: 10px; /* Add padding to the task container */
   margin-right: 20px; /* Add margin to the right of the task container */
 
@@ -67,7 +67,7 @@ input {
 button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #dc3545;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -75,9 +75,8 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #0056b3;
-}
+
+
 
 ul {
   list-style-type: none;
@@ -94,13 +93,12 @@ li {
   border-radius: 4px;
 }
 
-button {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+li span {
+  flex: 1;
+}
+
+li button {
+  margin-left: 10px;
 }
 
 button:hover {
@@ -111,21 +109,28 @@ button:hover {
 .priority-select {
   appearance: none; /* Remove default select arrow */
   padding: 8px 16px; /* Add padding */
-  border-radius: 20px; /* Make it rounded */
+  border-radius: 10px; /* Make it rounded */
   border: 1px solid #ccc; /* Add border */
   background-color: white; /* Set initial background color */
-  color: black; /* Set initial text color */
+  color: rgb(255, 255, 255); /* Set initial text color */
   cursor: pointer; /* Change cursor on hover */
+  width: 100px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .category-select {
   appearance: none; /* Remove default select arrow */
   padding: 8px 16px; /* Add padding */
-  border-radius: 20px; /* Make it rounded */
+  border-radius: 10px; /* Make it rounded */
   border: 1px solid #ccc; /* Add border */
   background-color: white; /* Set initial background color */
-  color: black; /* Set initial text color */
+  color: rgb(0, 0, 0); /* Set initial text color */
   cursor: pointer; /* Change cursor on hover */
+  width: 100px;
+  align-items: center;
 }
 
 
@@ -135,16 +140,17 @@ button:hover {
 
 .priority-select option {
   background-color: white; /* Set background color for options */
+  color: black;
 }
 
 .priority-select.low {
-  background-color: lightgreen; /* Set color for low priority */
+  background-color: rgb(35, 201, 35); /* Set color for low priority */
 }
 
 .priority-select.medium {
-  background-color: yellow; /* Set color for medium priority */
+  background-color: rgb(245, 178, 44); /* Set color for medium priority */
 }
 
 .priority-select.high {
-  background-color: red; /* Set color for high priority */
+  background-color: rgb(211, 27, 27); /* Set color for high priority */
 }

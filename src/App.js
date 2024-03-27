@@ -110,9 +110,9 @@ function App() {
     if (allTask){
       return true;
     }
-    if (!task.category === 'none') {
-      return false; // Return true to include all tasks when 'All Categories' is selected
-    }
+    // if (task.category === 'None') {
+    //   return true; // Return true to include all tasks when 'All Categories' is selected
+    // }
     if (!selectedCategory.includes(task.category)) {
       return false;
     }
@@ -226,13 +226,13 @@ function App() {
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
               </select>
-              <DatePicker
+              <DatePicker class="date-picker"
                 selected={task.dueDate}
                 onChange={(date) => handleDueDateChange(task.id, date)}
                 dateFormat="MM/dd/yyyy"
                 placeholderText="Due Date"
               />
-              <button onClick={() => handleToggleComplete(task.id)} style={{ backgroundColor: task.completed ? 'green' : 'red' }}>
+              <button onClick={() => handleToggleComplete(task.id)} style={{ backgroundColor: task.completed ? 'green' : '#dc3545' }}>
                 <FaCheck />
               </button>
               <button onClick={() => handleRemove(task.id)}>
